@@ -40,11 +40,11 @@ object SimpleServer extends App with MySslConfiguration {
     def businessLogic: Receive = {
       // just bounce frames back for Autobahn testsuite
       case x @ (_: BinaryFrame | _: TextFrame) =>
-        println(x)
+        println("Frame: " + x)
         sender() ! x
 
       case Push(msg) =>
-        println(msg)
+        println("Push: " + msg)
         send(TextFrame(msg))
 
       case x: FrameCommandFailed =>
@@ -56,7 +56,8 @@ object SimpleServer extends App with MySslConfiguration {
    def businessLogicNoUpgrade: Receive = {
       implicit val refFactory: ActorRefFactory = context
       runRoute {
-        getFromResourceDirectory("webapp") ~ 
+        getFromResourceDirectory("webapp") 
+        /*~ 
         {ctx =>
          println("Header: " + ctx.request.method)
          println("Upgrade: " + ctx.request.headers)
@@ -64,6 +65,8 @@ object SimpleServer extends App with MySslConfiguration {
          //println("Entity: " + x.entity)
          //println("Method: " + x.method)
         }
+        * 
+        */
       }
     }
   }

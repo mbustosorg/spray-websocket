@@ -59,7 +59,7 @@ object SimpleServer extends App with MySslConfiguration {
         path("websocket.html") {
           getFromResourceDirectory("webapp")        
         } ~
-        headerValueByName("Upgrade") { userId =>
+        optionalHeaderValueByName("Upgrade") { userId =>
           complete(s"The user is $userId")
         } ~
         path("") {

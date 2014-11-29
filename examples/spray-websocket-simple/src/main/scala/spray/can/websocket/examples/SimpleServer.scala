@@ -3,6 +3,8 @@ package spray.can.websocket.examples
 import akka.actor.{ ActorSystem, Actor, Props, ActorLogging, ActorRef, ActorRefFactory}
 import akka.io.IO
 import scala.io.StdIn.readLine
+import spray.util._
+import spray.http._
 import spray.can.Http
 import spray.can.server.UHttp
 import spray.can.websocket
@@ -48,23 +50,22 @@ object SimpleServer extends App with MySslConfiguration {
       case x: FrameCommandFailed =>
         log.error("frame command failed", x)
 
-      case x: HttpRequest => println(x)// do something
+      case x: HttpRequest => println("BL: " + x)// do something
     }
 
    def businessLogicNoUpgrade: Receive = {
-     case x: HttpRequest => 
+     case HttpRequest(_, Uri.Path("/websocket.html"), _, _, _) =>
        implicit val refFactory: ActorRefFactory = context
-       runRoute {
-           getFromResourceDirectory("webapp") ~
-           {
-             println(x.headers)
-             optionalHeaderValueByName("Upgrade") { userId =>
-               Thread.sleep(2000)
-               complete(s"The user is $userId")
-           }
-        }
-      }
-     case x => println(x)
+       getFromResourceDirectory("webapp")
+     case x: HttpRequest => 
+       println("Header: " + x.headers)
+       println("Entity: " + x.entity)
+       println("Method: " + x.method)
+       optionalHeaderValueByName("Upgrade") { userId =>
+         Thread.sleep(2000)
+         complete(s"The user is $userId")
+       }
+     case x => println("Fallback: " + x)
     }
   }
 

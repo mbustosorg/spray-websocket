@@ -51,7 +51,8 @@ object SimpleServer extends App with MySslConfiguration {
       implicit val refFactory: ActorRefFactory = context
       runRoute {
         println("runningRoute")
-        getFromResourceDirectory("webapp")
+        complete("runningRoute")
+        //getFromResourceDirectory("webapp")
       }
     }
   }

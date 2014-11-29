@@ -66,12 +66,12 @@ object SimpleServer extends App with MySslConfiguration {
 
     val server = system.actorOf(WebSocketServer.props(), "websocket")
 
-    IO(UHttp) ! Http.Bind(server, "localhost", 8110)
-    //IO(UHttp) ! Http.Bind(server, "0.0.0.0", args(0).toInt)
+    //IO(UHttp) ! Http.Bind(server, "localhost", 8110)
+    IO(UHttp) ! Http.Bind(server, "0.0.0.0", args(0).toInt)
 
-    readLine("Hit ENTER to exit ...\n")
-    system.shutdown()
-    system.awaitTermination()
+    //readLine("Hit ENTER to exit ...\n")
+    //system.shutdown()
+    //system.awaitTermination()
   }
 
   // because otherwise we get an ambiguous implicit if doMain is inlined

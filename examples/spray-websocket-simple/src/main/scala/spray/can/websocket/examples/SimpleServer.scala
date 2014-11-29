@@ -54,21 +54,17 @@ object SimpleServer extends App with MySslConfiguration {
     }
 
    def businessLogicNoUpgrade: Receive = {
-     case HttpRequest(_, Uri.Path("/websocket.html"), _, _, _) =>
-       implicit val refFactory: ActorRefFactory = context
-       println("GET WEBSOCKET")
-       runRoute {
-         getFromResourceDirectory("webapp")
-       }
-     case x: HttpRequest => 
-       println("Header: " + x.headers)
-       println("Entity: " + x.entity)
-       println("Method: " + x.method)
-       optionalHeaderValueByName("Upgrade") { userId =>
-         Thread.sleep(2000)
-         complete(s"The user is $userId")
-       }
-     case x => println("Fallback: " + x)
+      implicit val refFactory: ActorRefFactory = context
+      runRoute {
+        getFromResourceDirectory("webapp") ~ 
+        pathSingleSlash {ctx =>
+         println("Header: " + ctx.request.method)
+         println("Upgrade: " + ctx.request.headers)
+         complete ("")
+         //println("Entity: " + x.entity)
+         //println("Method: " + x.method)
+        }
+      }
     }
   }
 

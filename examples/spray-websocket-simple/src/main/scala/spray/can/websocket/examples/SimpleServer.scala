@@ -2,6 +2,7 @@ package spray.can.websocket.examples
 
 import akka.actor.{ ActorSystem, Actor, Props, ActorLogging, ActorRef, ActorRefFactory }
 import akka.io.IO
+import scala.io.StdIn.readLine
 import spray.can.Http
 import spray.can.server.UHttp
 import spray.can.websocket
@@ -49,6 +50,7 @@ object SimpleServer extends App with MySslConfiguration {
     def businessLogicNoUpgrade: Receive = {
       implicit val refFactory: ActorRefFactory = context
       runRoute {
+        println("runningRoute")
         getFromResourceDirectory("webapp")
       }
     }
@@ -60,8 +62,8 @@ object SimpleServer extends App with MySslConfiguration {
 
     val server = system.actorOf(WebSocketServer.props(), "websocket")
 
-    //IO(UHttp) ! Http.Bind(server, "localhost", args(0).toInt)
-    IO(UHttp) ! Http.Bind(server, "0.0.0.0", args(0).toInt)
+    IO(UHttp) ! Http.Bind(server, "localhost", 8110)
+    //IO(UHttp) ! Http.Bind(server, "0.0.0.0", args(0).toInt)
 
     readLine("Hit ENTER to exit ...\n")
     system.shutdown()

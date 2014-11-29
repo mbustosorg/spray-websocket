@@ -22,6 +22,9 @@ object SimpleServer extends App with MySslConfiguration {
     def receive = {
       // when a new connection comes in we register a WebSocketConnection actor as the per connection handler
       case Http.Connected(remoteAddress, localAddress) =>
+        println("Connected")
+        println(remoteAddress)
+        println(localAddress)
         val serverConnection = sender()
         val conn = context.actorOf(WebSocketWorker.props(serverConnection))
         serverConnection ! Http.Register(conn)

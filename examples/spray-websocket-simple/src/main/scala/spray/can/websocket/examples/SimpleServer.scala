@@ -59,12 +59,11 @@ object SimpleServer extends App with MySslConfiguration {
         path("websocket.html") {
           getFromResourceDirectory("webapp")        
         } ~
-        optionalHeaderValueByName("Upgrade") { userId =>
-          Thread.sleep(5000)
-          complete(s"The user is $userId")
-        } ~
         path("") {
-          complete("somePath")
+          optionalHeaderValueByName("Upgrade") { userId =>
+            Thread.sleep(5000)
+            complete(s"The user is $userId")
+          }
         }
       }
     }

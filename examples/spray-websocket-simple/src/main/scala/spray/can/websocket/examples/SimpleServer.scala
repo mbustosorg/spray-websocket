@@ -22,9 +22,7 @@ object SimpleServer extends App with MySslConfiguration {
     def receive = {
       // when a new connection comes in we register a WebSocketConnection actor as the per connection handler
       case Http.Connected(remoteAddress, localAddress) =>
-        println("Connected")
-        println(remoteAddress)
-        println(localAddress)
+        println("Connected, Remote: " + remoteAddress + ", Local: " + localAddress)
         val serverConnection = sender()
         val conn = context.actorOf(WebSocketWorker.props(serverConnection))
         serverConnection ! Http.Register(conn)
@@ -55,9 +53,11 @@ object SimpleServer extends App with MySslConfiguration {
 
    def businessLogicNoUpgrade: Receive = {
       implicit val refFactory: ActorRefFactory = context
+      println("xxx")
       runRoute {
         getFromResourceDirectory("webapp") ~
         path("") {
+          println("yyy")
           optionalHeaderValueByName("Upgrade") { userId =>
             Thread.sleep(5000)
             complete(s"The user is $userId")

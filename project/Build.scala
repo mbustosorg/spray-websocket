@@ -11,6 +11,7 @@ object Build extends sbt.Build {
     .aggregate(examples, websocket)
     .settings(basicSettings: _*)
     .settings(noPublishing: _*)
+    .settings(com.typesafe.sbt.SbtStartScript.startScriptForClassesSettings: _*)
 
   lazy val websocket = Project("spray-websocket", file("spray-websocket"))
     .settings(defaultOsgiSettings: _*)
@@ -21,15 +22,18 @@ object Build extends sbt.Build {
     .settings(formatSettings: _*)
     .settings(releaseSettings: _*)
     .settings(libraryDependencies ++= Dependencies.all)
+    .settings(com.typesafe.sbt.SbtStartScript.startScriptForClassesSettings: _*)
 
   lazy val examples = Project("spray-websocket-examples", file("examples"))
     .aggregate(websocketSimple)
     .settings(exampleSettings: _*)
+    .settings(com.typesafe.sbt.SbtStartScript.startScriptForClassesSettings: _*)
 
   lazy val websocketSimple = Project("spray-websocket-examples-simple", file("examples/spray-websocket-simple"))
     .dependsOn(websocket)
     .settings(formatSettings: _*)
     .settings(exampleSettings: _*)
+    .settings(com.typesafe.sbt.SbtStartScript.startScriptForClassesSettings: _*)
 
   lazy val basicSettings = Seq(
     organization := "com.wandoulabs.akka",
@@ -100,7 +104,6 @@ object Build extends sbt.Build {
       .setPreference(AlignSingleLineCaseStatements, true)
       .setPreference(DoubleIndentClassDeclaration, true)
       .setPreference(IndentSpaces, 2)
-
 }
 
 object Dependencies {

@@ -57,7 +57,7 @@ object SimpleServer extends App with MySslConfiguration {
       implicit val refFactory: ActorRefFactory = context
       runRoute {
         getFromResourceDirectory("webapp") ~ 
-        pathSingleSlash {ctx =>
+        {ctx =>
          println("Header: " + ctx.request.method)
          println("Upgrade: " + ctx.request.headers)
          complete ("")

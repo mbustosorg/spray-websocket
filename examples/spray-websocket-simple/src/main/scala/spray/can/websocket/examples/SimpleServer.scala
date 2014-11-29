@@ -56,9 +56,7 @@ object SimpleServer extends App with MySslConfiguration {
    def businessLogicNoUpgrade: Receive = {
       implicit val refFactory: ActorRefFactory = context
       runRoute {
-        path("websocket.html") {
-          getFromResourceDirectory("webapp")        
-        } ~
+        getFromResourceDirectory("webapp") ~
         path("") {
           optionalHeaderValueByName("Upgrade") { userId =>
             Thread.sleep(5000)

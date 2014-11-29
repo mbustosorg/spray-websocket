@@ -60,7 +60,7 @@ object SimpleServer extends App with MySslConfiguration {
 
     val server = system.actorOf(WebSocketServer.props(), "websocket")
 
-    IO(UHttp) ! Http.Bind(server, "localhost", 8080)
+    IO(UHttp) ! Http.Bind(server, "localhost", args(0).toInt)
 
     readLine("Hit ENTER to exit ...\n")
     system.shutdown()

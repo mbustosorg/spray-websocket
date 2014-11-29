@@ -50,11 +50,12 @@ object SimpleServer extends App with MySslConfiguration {
       case x: FrameCommandFailed =>
         log.error("frame command failed", x)
 
-      case x: HttpRequest => // do something
+      case x: HttpRequest => println(x)// do something
     }
 
     def businessLogicNoUpgrade: Receive = {
       implicit val refFactory: ActorRefFactory = context
+      println("NOUPGRADE")
       runRoute {
         getFromResourceDirectory("webapp")
       }

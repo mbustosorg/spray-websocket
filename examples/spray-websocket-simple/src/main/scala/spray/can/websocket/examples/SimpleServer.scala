@@ -1,6 +1,6 @@
 package spray.can.websocket.examples
 
-import akka.actor.{ ActorSystem, Actor, Props, ActorLogging, ActorRef, ActorRefFactory }
+import akka.actor.{ ActorSystem, Actor, Props, ActorLogging, ActorRef, ActorRefFactory}
 import akka.io.IO
 import scala.io.StdIn.readLine
 import spray.can.Http
@@ -55,7 +55,7 @@ object SimpleServer extends App with MySslConfiguration {
       runRoute {
         println("runningRoute")
         complete("runningRoute")
-        //getFromResourceDirectory("webapp")
+        getFromResourceDirectory("webapp")
       }
     }
   }
@@ -63,11 +63,15 @@ object SimpleServer extends App with MySslConfiguration {
   def doMain() {
     implicit val system = ActorSystem()
     import system.dispatcher
-
+    import akka.util.Timeout
+    import scala.concurrent.duration._
+    import akka.pattern.{ ask, pipe }
+    implicit val timeout = Timeout(DurationInt(5).seconds)
+    
     val server = system.actorOf(WebSocketServer.props(), "websocket")
 
-    //IO(UHttp) ! Http.Bind(server, "localhost", 8110)
-    IO(UHttp) ! Http.Bind(server, "0.0.0.0", args(0).toInt)
+    //IO(UHttp) ? Http.Bind(server, "localhost", 8110)
+    IO(UHttp) ? Http.Bind(server, "0.0.0.0", args(0).toInt)
 
     //readLine("Hit ENTER to exit ...\n")
     //system.shutdown()

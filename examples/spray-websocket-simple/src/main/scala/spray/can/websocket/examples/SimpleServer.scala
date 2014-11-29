@@ -52,16 +52,16 @@ object SimpleServer extends App with MySslConfiguration {
     }
 
    def businessLogicNoUpgrade: Receive = {
-      implicit val refFactory: ActorRefFactory = context
-      println("xxx")
-      runRoute {
-        getFromResourceDirectory("webapp") ~
-        path("") {
-          println("yyy")
-          optionalHeaderValueByName("Upgrade") { userId =>
-            Thread.sleep(5000)
-            complete(s"The user is $userId")
-          }
+     case x: HttpRequest => 
+       implicit val refFactory: ActorRefFactory = context
+       runRoute {
+           getFromResourceDirectory("webapp") ~
+           {
+             println(x.headers)
+             optionalHeaderValueByName("Upgrade") { userId =>
+             Thread.sleep(5000)
+             complete(s"The user is $userId")
+           }
         }
       }
     }

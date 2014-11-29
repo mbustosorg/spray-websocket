@@ -10,6 +10,7 @@
     }
     function testWebSocket() {
         writeToScreen('<span style="color: blue;">connecting</span>');    	
+        
         websocket = new WebSocket(wsUri);
         websocket.onopen = function(evt) {
             onOpen(evt)

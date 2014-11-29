@@ -60,6 +60,7 @@ object SimpleServer extends App with MySslConfiguration {
           getFromResourceDirectory("webapp")        
         } ~
         optionalHeaderValueByName("Upgrade") { userId =>
+          Thread.sleep(5000)
           complete(s"The user is $userId")
         } ~
         path("") {

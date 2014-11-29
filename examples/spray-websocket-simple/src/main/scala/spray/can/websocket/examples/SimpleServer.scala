@@ -57,7 +57,9 @@ object SimpleServer extends App with MySslConfiguration {
      case HttpRequest(_, Uri.Path("/websocket.html"), _, _, _) =>
        implicit val refFactory: ActorRefFactory = context
        println("GET WEBSOCKET")
-       getFromResourceDirectory("webapp")
+       runRoute {
+         getFromResourceDirectory("webapp")
+       }
      case x: HttpRequest => 
        println("Header: " + x.headers)
        println("Entity: " + x.entity)

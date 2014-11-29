@@ -59,11 +59,12 @@ object SimpleServer extends App with MySslConfiguration {
            {
              println(x.headers)
              optionalHeaderValueByName("Upgrade") { userId =>
-             Thread.sleep(5000)
-             complete(s"The user is $userId")
+               Thread.sleep(2000)
+               complete(s"The user is $userId")
            }
         }
       }
+     case x => println(x)
     }
   }
 
